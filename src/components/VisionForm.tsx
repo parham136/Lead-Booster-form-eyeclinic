@@ -130,21 +130,16 @@ export function VisionForm() {
     window.location.href = 'https://your-booking-page.com';
   };
 
-  const handleAbandon = async () => {
+const handleAbandon = async () => {
     try {
       const payload = {
-        path: selectedPath,
-        answers: answers.reduce((acc, answer) => {
-          acc[answer.questionId] = answer.value;
-          return acc;
-        }, {} as Record<string, string>),
-        firstName: leadData?.firstName,
-        lastName: leadData?.lastName,
         email: leadData?.email,
+        firstName: leadData?.firstName,
+        intent: 'abandon_nurture', // This tells n8n they closed the window
         status: 'result_abandoned',
       };
 
-      await fetch('https://your-n8n-webhook-url.com/webhook', {
+      await fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook-test/vision-quiz', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -152,6 +147,7 @@ export function VisionForm() {
         body: JSON.stringify(payload),
       });
 
+      // This part handles the UI after the data is sent
       setResultMessage('Results saved! We\'ll email you a copy shortly.');
 
       setTimeout(() => {
@@ -164,13 +160,7 @@ export function VisionForm() {
       }, 2000);
     } catch (error) {
       console.error('Error sending abandonment data:', error);
-
       setStage('qualifier');
-      setSelectedPath(null);
-      setAnswers([]);
-      setCurrentQuestionIndex(0);
-      setLeadData(null);
-      setResultMessage('');
     }
   };
 
