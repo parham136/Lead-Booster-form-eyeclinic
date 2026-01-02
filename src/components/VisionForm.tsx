@@ -87,7 +87,7 @@ export function VisionForm() {
 
     const minimumDelay = new Promise((resolve) => setTimeout(resolve, 4000));
 
-    const webhookPromise = fetch('http://localhost:5678/webhook/vision-quiz', {
+    const webhookPromise = fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook/vision-quiz', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
