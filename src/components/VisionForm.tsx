@@ -113,7 +113,7 @@ export function VisionForm() {
 
   const handleBookConsultation = async () => {
     try {
-      await fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev -> http://localhost:5678', {
+      await fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook-test/vision-quiz', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
