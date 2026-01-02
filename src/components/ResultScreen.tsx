@@ -1,0 +1,61 @@
+import { motion } from 'framer-motion';
+import { CheckCircle, Calendar, X } from 'lucide-react';
+
+interface ResultScreenProps {
+  message: string;
+  onBookConsultation: () => void;
+  onAbandon: () => void;
+}
+
+export function ResultScreen({ message, onBookConsultation, onAbandon }: ResultScreenProps) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5 }}
+      className="w-full max-w-2xl mx-auto"
+    >
+      <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 relative">
+        <button
+          onClick={onAbandon}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors p-2 rounded-lg hover:bg-gray-100"
+          aria-label="Close"
+        >
+          <X size={24} />
+        </button>
+
+        <div className="flex items-center gap-3 mb-6">
+          <CheckCircle className="text-teal-500" size={48} />
+          <h2 className="text-3xl font-semibold text-gray-900">
+            Your Vision Analysis
+          </h2>
+        </div>
+
+        <div className="bg-teal-50 rounded-xl p-6 mb-8 border-l-4 border-teal-500">
+          <p className="text-gray-700 text-lg leading-relaxed whitespace-pre-line">
+            {message}
+          </p>
+        </div>
+
+        <button
+          onClick={onBookConsultation}
+          className="w-full bg-teal-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-teal-700 transition-all flex items-center justify-center gap-3 group"
+        >
+          <Calendar size={24} className="group-hover:scale-110 transition-transform" />
+          Book My Free Consultation
+        </button>
+
+        <p className="text-center text-sm text-gray-500 mt-4">
+          No commitment required • Takes only 2 minutes
+        </p>
+
+        <button
+          onClick={onAbandon}
+          className="w-full text-center text-gray-600 hover:text-gray-800 transition-colors mt-4 underline"
+        >
+          Not now, just email me the results
+        </button>
+      </div>
+    </motion.div>
+  );
+}
