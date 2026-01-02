@@ -87,7 +87,7 @@ export function VisionForm() {
 
     const minimumDelay = new Promise((resolve) => setTimeout(resolve, 4000));
 
-    const webhookPromise = fetch('https://your-n8n-webhook-url.com/webhook', {
+    const webhookPromise = fetch('http://localhost:5678/webhook/vision-quiz', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
