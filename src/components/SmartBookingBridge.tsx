@@ -41,10 +41,36 @@ export function SmartBookingBridge({
     }
   }, [isOpen]);
 
-const handlePhoneSubmit = async (e: React.FormEvent) => {
+  // NEW: Tracking function for when a user closes the modal prematurely
+  const trackExit = async (currentStage: string) => {
+    try {
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          phoneNumber: phoneNumber || 'not_provided',
+          stage: `dismissed_at_${currentStage}`,
+          event: 'intent_dismissed',
+        }),
+      });
+    } catch (e) {
+      console.error("Exit tracking failed");
+    }
+  };
+
+  // Wrapper for the close action
+  const handleUserDismissal = () => {
+    if (stage !== 'success' && stage !== 'redirecting') {
+      trackExit(stage);
+    }
+    onClose();
+  };
+
+  const handlePhoneSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // 1. UK MOBILE VALIDATION
     const ukPhoneRegex = /^07\d{9}$/;
     const cleanPhone = phoneNumber.replace(/\s/g, '');
     
@@ -54,9 +80,7 @@ const handlePhoneSubmit = async (e: React.FormEvent) => {
     }
 
     setIsSubmitting(true);
-
     try {
-      // 2. SEND DATA TO N8N
       await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -71,21 +95,16 @@ const handlePhoneSubmit = async (e: React.FormEvent) => {
         keepalive: true
       });
 
-      // 3. THE BRANCHING LOGIC
       if (hasExternalSystem === true && externalBookingUrl) {
-        // CASE A: EXTERNAL
         setStage('redirecting');
         setTimeout(() => {
           window.location.href = externalBookingUrl;
         }, 1500);
       } else {
-        // CASE B: INTERNAL (FORCED)
-        console.log("Switching to internal calendar..."); // Debugging log
         setStage('calendar'); 
       }
     } catch (error) {
       console.error('Submission error:', error);
-      // Fail-safe: if webhook fails but we are internal, show calendar anyway
       if (!hasExternalSystem) setStage('calendar');
     } finally {
       setIsSubmitting(false);
@@ -95,9 +114,7 @@ const handlePhoneSubmit = async (e: React.FormEvent) => {
   const handleCalendarSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
-      // 1. SEND DATA TO N8N
       await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -111,12 +128,8 @@ const handlePhoneSubmit = async (e: React.FormEvent) => {
           stage: 'appointment_requested',
         }),
       });
-
-      // 2. FORCE TRANSITION TO SUCCESS STAGE
       setStage('success'); 
     } catch (error) {
-      console.error('Error submitting appointment:', error);
-      // Fail-safe: show success message anyway so the user experience isn't broken
       setStage('success');
     } finally {
       setIsSubmitting(false);
@@ -147,7 +160,7 @@ const handlePhoneSubmit = async (e: React.FormEvent) => {
           className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
           onClick={(e) => {
             if (e.target === e.currentTarget && stage !== 'redirecting') {
-              onClose();
+              handleUserDismissal(); // Use the dismissal tracker
             }
           }}
         >
@@ -164,27 +177,21 @@ const handlePhoneSubmit = async (e: React.FormEvent) => {
                     <div className="bg-blue-100 p-3 rounded-2xl">
                       <Phone className="text-blue-600" size={28} />
                     </div>
-                    <h2 className="text-2xl font-bold text-gray-900">
-                      Almost There!
-                    </h2>
+                    <h2 className="text-2xl font-bold text-gray-900">Almost There!</h2>
                   </div>
                   <button
-                    onClick={onClose}
+                    onClick={handleUserDismissal} // Use the dismissal tracker
                     className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full transition-all"
                   >
                     <X size={24} />
                   </button>
                 </div>
-
                 <p className="text-gray-600 mb-8 leading-relaxed">
                   Enter your mobile to secure your results and ensure our team can reach you if the connection drops during booking.
                 </p>
-
                 <form onSubmit={handlePhoneSubmit} className="space-y-6">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      UK Mobile Number
-                    </label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">UK Mobile Number</label>
                     <input
                       type="tel"
                       value={phoneNumber}
@@ -194,17 +201,13 @@ const handlePhoneSubmit = async (e: React.FormEvent) => {
                       className="w-full px-5 py-4 border-2 border-gray-100 rounded-2xl focus:border-blue-500 focus:ring-0 transition-all text-lg font-medium"
                     />
                   </div>
-
                   <div className="bg-blue-50 rounded-2xl p-4 border-l-4 border-blue-500">
-                    <p className="text-sm text-blue-900">
-                      <span className="font-bold">Privacy First:</span> This is only used for appointment confirmation and critical medical updates.
-                    </p>
+                    <p className="text-sm text-blue-900"><span className="font-bold">Privacy First:</span> This is only used for appointment confirmation.</p>
                   </div>
-
                   <button
                     type="submit"
                     disabled={isSubmitting || phoneNumber.length < 11}
-                    className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-200 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg hover:bg-blue-700 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? <Loader2 className="animate-spin" /> : 'Continue to Booking'}
                   </button>
@@ -229,9 +232,10 @@ const handlePhoneSubmit = async (e: React.FormEvent) => {
                     </div>
                     <h2 className="text-2xl font-bold text-gray-900">Preferred Time</h2>
                   </div>
-                  <button onClick={onClose} className="text-gray-400 p-2 rounded-full hover:bg-gray-100"><X size={24} /></button>
+                  <button onClick={handleUserDismissal} className="text-gray-400 p-2 rounded-full hover:bg-gray-100">
+                    <X size={24} />
+                  </button>
                 </div>
-
                 <form onSubmit={handleCalendarSubmit} className="space-y-6">
                   <input
                     type="date"
@@ -242,7 +246,6 @@ const handlePhoneSubmit = async (e: React.FormEvent) => {
                     required
                     className="w-full px-5 py-4 border-2 border-gray-100 rounded-2xl focus:border-blue-500 text-lg"
                   />
-
                   <div className="grid grid-cols-1 gap-3">
                     {['morning', 'afternoon', 'evening'].map((time) => (
                       <button
@@ -258,7 +261,6 @@ const handlePhoneSubmit = async (e: React.FormEvent) => {
                       </button>
                     ))}
                   </div>
-
                   <button
                     type="submit"
                     disabled={isSubmitting || !selectedDate || !preferredTime}
@@ -276,7 +278,7 @@ const handlePhoneSubmit = async (e: React.FormEvent) => {
                   <CheckCircle className="text-green-600" size={40} />
                 </div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Request Received</h2>
-                <p className="text-gray-600 mb-8">Our coordinator will call you within 24 hours to finalize your slot.</p>
+                <p className="text-gray-600 mb-8">Our coordinator will call you within 24 hours.</p>
                 <button onClick={onClose} className="w-full bg-gray-900 text-white py-4 rounded-2xl font-bold">Back to Site</button>
               </div>
             )}
