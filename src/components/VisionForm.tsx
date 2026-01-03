@@ -87,7 +87,6 @@ export function VisionForm() {
 
     const minimumDelay = new Promise((resolve) => setTimeout(resolve, 4000));
 
-    // FIX: Using webhook-test and adding ngrok-skip-browser-warning header
     const webhookPromise = fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook-test/vision-quiz', {
       method: 'POST',
       headers: {
@@ -122,8 +121,9 @@ export function VisionForm() {
           'ngrok-skip-browser-warning': 'true'
         },
         body: JSON.stringify({
-          email: leadData?.email,
           intent: 'book_consultation',
+          email: leadData?.email,
+          firstName: leadData?.firstName,
         }),
       });
     } catch (error) {
@@ -133,37 +133,39 @@ export function VisionForm() {
     window.location.href = 'https://your-booking-page.com';
   };
 
-const handleAbandon = async () => {
-  console.log("Attempting to send intent..."); // Check browser console (F12)
-  const payload = {
-    intent: 'abandon_nurture', // Put this first
-    email: leadData?.email || email, 
-    firstName: leadData?.firstName || firstName,
-    status: 'result_abandoned'
-  };
-  
-  await fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook-test/vision-quiz', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
+  const handleAbandon = async () => {
+    try {
+      const payload = {
+        intent: 'abandon_nurture',
+        email: leadData?.email,
+        firstName: leadData?.firstName,
+        status: 'result_abandoned',
+      };
 
-    setResultMessage('Results saved! We\'ll email you a copy shortly.');
+      await fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook-test/vision-quiz', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
+        },
+        body: JSON.stringify(payload),
+      });
 
-    // Resetting the form AFTER the fetch is successful
-    setTimeout(() => {
+      setResultMessage('Results saved! We\'ll email you a copy shortly.');
+
+      setTimeout(() => {
+        setStage('qualifier');
+        setSelectedPath(null);
+        setAnswers([]);
+        setCurrentQuestionIndex(0);
+        setLeadData(null);
+        setResultMessage('');
+      }, 2000);
+    } catch (error) {
+      console.error('Error sending abandonment data:', error);
       setStage('qualifier');
-      setSelectedPath(null);
-      setAnswers([]);
-      setCurrentQuestionIndex(0);
-      setLeadData(null);
-      setResultMessage('');
-    }, 2000);
-  } catch (error) {
-    console.error('Error sending abandonment data:', error);
-    setStage('qualifier');
-  }
-};
+    }
+  };
 
   const getCurrentQuestion = (): Question | null => {
     if (stage === 'qualifier') {
@@ -243,6 +245,9 @@ const handleAbandon = async () => {
                   message={resultMessage}
                   onBookConsultation={handleBookConsultation}
                   onAbandon={handleAbandon}
+                  firstName={leadData?.firstName || ''}
+                  lastName={leadData?.lastName || ''}
+                  email={leadData?.email || ''}
                 />
               )}
             </>
