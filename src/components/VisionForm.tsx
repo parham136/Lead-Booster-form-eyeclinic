@@ -134,23 +134,19 @@ export function VisionForm() {
   };
 
 const handleAbandon = async () => {
-  try {
-    // We send the intent immediately with the current email state
-    const payload = {
-      email: leadData?.email, // Ensure this isn't null
-      firstName: leadData?.firstName,
-      intent: 'abandon_nurture',
-      status: 'result_abandoned',
-    };
-
-    await fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook-test/vision-quiz', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'ngrok-skip-browser-warning': 'true'
-      },
-      body: JSON.stringify(payload),
-    });
+  console.log("Attempting to send intent..."); // Check browser console (F12)
+  const payload = {
+    intent: 'abandon_nurture', // Put this first
+    email: leadData?.email || email, 
+    firstName: leadData?.firstName || firstName,
+    status: 'result_abandoned'
+  };
+  
+  await fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook-test/vision-quiz', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
 
     setResultMessage('Results saved! We\'ll email you a copy shortly.');
 
