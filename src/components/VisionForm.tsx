@@ -87,7 +87,7 @@ export function VisionForm() {
 
     const minimumDelay = new Promise((resolve) => setTimeout(resolve, 4000));
 
-    const webhookPromise = fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook/vision-quiz', {
+    const webhookPromise = fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev /webhook/vision-quiz', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ export function VisionForm() {
 
   const handleBookConsultation = async () => {
     try {
-      await fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook/vision-quiz', {
+      await fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev /webhook/vision-quiz', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ export function VisionForm() {
         status: 'result_abandoned',
       };
 
-      await fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook/vision-quiz', {
+      await fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev /webhook/vision-quiz', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
