@@ -1,13 +1,21 @@
+import { useState } from 'react'; // ADDED THIS
 import { motion } from 'framer-motion';
 import { CheckCircle, Calendar, X } from 'lucide-react';
+import { SmartBookingBridge } from './SmartBookingBridge'; // ADDED THIS
+import { bookingConfig } from '../config/bookingConfig'; // ADDED THIS
 
 interface ResultScreenProps {
   message: string;
   onBookConsultation: () => void;
   onAbandon: () => void;
+  firstName: string; // Ensure these are passed in
+  lastName: string;
+  email: string;
 }
 
-export function ResultScreen({ message, onBookConsultation, onAbandon }: ResultScreenProps) {
+export function ResultScreen({ message, onBookConsultation, onAbandon, firstName, lastName, email }: ResultScreenProps) {
+  const [isBookingOpen, setIsBookingOpen] = useState(false); // ADDED THIS
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -38,7 +46,7 @@ export function ResultScreen({ message, onBookConsultation, onAbandon }: ResultS
         </div>
 
         <button
-          onClick={onBookConsultation}
+          onClick={() => setIsBookingOpen(true)} // UPDATED THIS
           className="w-full bg-teal-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-teal-700 transition-all flex items-center justify-center gap-3 group"
         >
           <Calendar size={24} className="group-hover:scale-110 transition-transform" />
@@ -56,6 +64,16 @@ export function ResultScreen({ message, onBookConsultation, onAbandon }: ResultS
           Not now, just email me the results
         </button>
       </div>
+
+      {/* THE OVERLAY MODULE */}
+      <SmartBookingBridge
+        isOpen={isBookingOpen}
+        onClose={() => setIsBookingOpen(false)}
+        firstName={firstName}
+        lastName={lastName}
+        email={email}
+        {...bookingConfig}
+      />
     </motion.div>
   );
 }
