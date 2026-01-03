@@ -55,11 +55,14 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
 
 
         <button
-          onClick={onAbandon}
-          className="w-full text-center text-gray-600 hover:text-gray-800 transition-colors mt-4 underline"
-        >
-          Not now, just email me the results
-        </button>
+        onClick={(e) => {
+          e.preventDefault(); 
+          onAbandon();
+        }}
+        className="w-full text-center text-gray-600 hover:text-gray-800 transition-colors mt-4 underline"
+      >
+        Not now, just email me the results
+      </button>
       </div>
 
       {/* THE OVERLAY MODULE */}
