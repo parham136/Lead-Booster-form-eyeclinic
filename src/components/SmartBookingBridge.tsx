@@ -41,21 +41,22 @@ export function SmartBookingBridge({
     }
   }, [isOpen]);
 
-  const handlePhoneSubmit = async (e: React.FormEvent) => {
+const handlePhoneSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // UK MOBILE VALIDATION: Starts with 07 and has 11 digits
+    // 1. UK MOBILE VALIDATION
     const ukPhoneRegex = /^07\d{9}$/;
-    const cleanPhone = phoneNumber.replace(/\s/g, ''); // Remove spaces for validation
+    const cleanPhone = phoneNumber.replace(/\s/g, '');
     
     if (!ukPhoneRegex.test(cleanPhone)) {
-      alert("Please enter a valid UK mobile number starting with 07 (11 digits)");
+      alert("Please enter a valid UK mobile number starting with 07");
       return;
     }
 
     setIsSubmitting(true);
 
     try {
+      // 2. SEND DATA TO N8N
       await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -65,23 +66,27 @@ export function SmartBookingBridge({
           email,
           phoneNumber: cleanPhone,
           stage: 'phone_captured',
+          source: hasExternalSystem ? 'external_redirect' : 'internal_calendar'
         }),
-        keepalive: true // Ensures request finishes even if page redirects
+        keepalive: true
       });
 
-      if (hasExternalSystem && externalBookingUrl) {
+      // 3. THE BRANCHING LOGIC
+      if (hasExternalSystem === true && externalBookingUrl) {
+        // CASE A: EXTERNAL
         setStage('redirecting');
-        // Small delay so user sees the "Redirecting" state
         setTimeout(() => {
           window.location.href = externalBookingUrl;
         }, 1500);
       } else {
-        setStage('calendar');
+        // CASE B: INTERNAL (FORCED)
+        console.log("Switching to internal calendar..."); // Debugging log
+        setStage('calendar'); 
       }
     } catch (error) {
-      console.error('Error submitting phone number:', error);
-      // Fail-safe: Redirect anyway if we have a system, so the lead isn't lost
-      if (hasExternalSystem && externalBookingUrl) window.location.href = externalBookingUrl;
+      console.error('Submission error:', error);
+      // Fail-safe: if webhook fails but we are internal, show calendar anyway
+      if (!hasExternalSystem) setStage('calendar');
     } finally {
       setIsSubmitting(false);
     }
