@@ -87,10 +87,12 @@ export function VisionForm() {
 
     const minimumDelay = new Promise((resolve) => setTimeout(resolve, 4000));
 
-    const webhookPromise = fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook/vision-quiz', {
+    // FIX: Using webhook-test and adding ngrok-skip-browser-warning header
+    const webhookPromise = fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook-test/vision-quiz', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true'
       },
       body: JSON.stringify(payload),
     })
@@ -117,6 +119,7 @@ export function VisionForm() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
         },
         body: JSON.stringify({
           email: leadData?.email,
@@ -130,12 +133,12 @@ export function VisionForm() {
     window.location.href = 'https://your-booking-page.com';
   };
 
-const handleAbandon = async () => {
+  const handleAbandon = async () => {
     try {
       const payload = {
         email: leadData?.email,
         firstName: leadData?.firstName,
-        intent: 'abandon_nurture', // This tells n8n they closed the window
+        intent: 'abandon_nurture',
         status: 'result_abandoned',
       };
 
@@ -143,11 +146,11 @@ const handleAbandon = async () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
         },
         body: JSON.stringify(payload),
       });
 
-      // This part handles the UI after the data is sent
       setResultMessage('Results saved! We\'ll email you a copy shortly.');
 
       setTimeout(() => {
