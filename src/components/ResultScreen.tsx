@@ -53,9 +53,6 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
           Book My Free Consultation
         </button>
 
-        <p className="text-center text-sm text-gray-500 mt-4">
-          No commitment required • Takes only 2 minutes
-        </p>
 
         <button
           onClick={onAbandon}
