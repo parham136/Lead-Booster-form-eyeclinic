@@ -133,39 +133,41 @@ export function VisionForm() {
     window.location.href = 'https://your-booking-page.com';
   };
 
-  const handleAbandon = async () => {
-    try {
-      const payload = {
-        email: leadData?.email,
-        firstName: leadData?.firstName,
-        intent: 'abandon_nurture',
-        status: 'result_abandoned',
-      };
+const handleAbandon = async () => {
+  try {
+    // We send the intent immediately with the current email state
+    const payload = {
+      email: leadData?.email, // Ensure this isn't null
+      firstName: leadData?.firstName,
+      intent: 'abandon_nurture',
+      status: 'result_abandoned',
+    };
 
-      await fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook-test/vision-quiz', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'true'
-        },
-        body: JSON.stringify(payload),
-      });
+    await fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook-test/vision-quiz', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true'
+      },
+      body: JSON.stringify(payload),
+    });
 
-      setResultMessage('Results saved! We\'ll email you a copy shortly.');
+    setResultMessage('Results saved! We\'ll email you a copy shortly.');
 
-      setTimeout(() => {
-        setStage('qualifier');
-        setSelectedPath(null);
-        setAnswers([]);
-        setCurrentQuestionIndex(0);
-        setLeadData(null);
-        setResultMessage('');
-      }, 2000);
-    } catch (error) {
-      console.error('Error sending abandonment data:', error);
+    // Resetting the form AFTER the fetch is successful
+    setTimeout(() => {
       setStage('qualifier');
-    }
-  };
+      setSelectedPath(null);
+      setAnswers([]);
+      setCurrentQuestionIndex(0);
+      setLeadData(null);
+      setResultMessage('');
+    }, 2000);
+  } catch (error) {
+    console.error('Error sending abandonment data:', error);
+    setStage('qualifier');
+  }
+};
 
   const getCurrentQuestion = (): Question | null => {
     if (stage === 'qualifier') {
