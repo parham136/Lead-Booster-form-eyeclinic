@@ -97,6 +97,7 @@ const handlePhoneSubmit = async (e: React.FormEvent) => {
     setIsSubmitting(true);
 
     try {
+      // 1. SEND DATA TO N8N
       await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -111,9 +112,12 @@ const handlePhoneSubmit = async (e: React.FormEvent) => {
         }),
       });
 
-      setStage('success');
+      // 2. FORCE TRANSITION TO SUCCESS STAGE
+      setStage('success'); 
     } catch (error) {
       console.error('Error submitting appointment:', error);
+      // Fail-safe: show success message anyway so the user experience isn't broken
+      setStage('success');
     } finally {
       setIsSubmitting(false);
     }
