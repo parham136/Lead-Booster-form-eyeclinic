@@ -142,7 +142,7 @@ export function VisionForm() {
         status: 'result_abandoned',
       };
 
-      await fetch('http://localhost:5678', {
+      await fetch('https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook/vision-quiz', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
