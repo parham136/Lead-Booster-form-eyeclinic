@@ -130,7 +130,7 @@ export function VisionForm() {
       console.error('Error sending booking intent:', error);
     }
 
-    //window.location.href = 'https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook/vision-quiz';
+    window.location.href = 'https://supersquamosal-sanora-misformed.ngrok-free.dev/webhook/vision-quiz';
   };
 
   const handleAbandon = async () => {
