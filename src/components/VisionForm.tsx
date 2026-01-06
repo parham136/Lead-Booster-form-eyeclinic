@@ -87,7 +87,7 @@ export function VisionForm() {
 
     const minimumDelay = new Promise((resolve) => setTimeout(resolve, 4000));
 
-    const webhookPromise = fetch('https://vision-clinic-conver-kr6h.bolt.host/', {
+    const webhookPromise = fetch('http://localhost:5678/webhook/vision-quiz', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ export function VisionForm() {
 
   const handleBookConsultation = async () => {
     try {
-      await fetch('https://vision-clinic-conver-kr6h.bolt.host/', {
+      await fetch('http://localhost:5678/webhook/vision-quiz', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ export function VisionForm() {
       console.error('Error sending booking intent:', error);
     }
 
-    window.location.href = 'https://vision-clinic-conver-kr6h.bolt.host/';
+    window.location.href = 'http://localhost:5678/webhook/vision-quiz';
   };
 
   const handleAbandon = async () => {
@@ -142,7 +142,7 @@ export function VisionForm() {
         status: 'result_abandoned',
       };
 
-      await fetch('https://vision-clinic-conver-kr6h.bolt.host/', {
+      await fetch('http://localhost:5678/webhook/vision-quiz', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
