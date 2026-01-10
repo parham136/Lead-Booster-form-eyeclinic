@@ -28,17 +28,31 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
     >
       <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 relative">
         <button
-          onClick={() => {
-            if (message !== "Results saved! We'll email you a copy shortly.") {
-              onAbandon(); // send abandon signal ONLY on first (AI result) page
-            }
-            window.location.reload(); // close popup + return to form
-          }}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors p-2 rounded-lg hover:bg-gray-100"
-          aria-label="Close"
-        >
-          <X size={24} />
-        </button>
+        onClick={() => {
+          if (message !== "Results saved! We'll email you a copy shortly.") {
+            navigator.sendBeacon(
+              'https://orbilo.app.n8n.cloud/webhook/vision-quiz',
+              new Blob(
+                [
+                  JSON.stringify({
+                    intent: 'abandon_nurture',
+                    email,
+                    firstName,
+                    status: 'result_abandoned',
+                  }),
+                ],
+                { type: 'application/json' }
+              )
+            );
+          }
+      
+          window.location.reload();
+        }}
+        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors p-2 rounded-lg hover:bg-gray-100"
+        aria-label="Close"
+      >
+        <X size={24} />
+      </button>
 
         <div className="flex items-center gap-3 mb-6">
           <CheckCircle className="text-teal-500" size={48} />
