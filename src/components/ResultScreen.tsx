@@ -28,6 +28,7 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
     >
       <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 relative">
         <button
+          type="button"
         onClick={() => {
           if (message !== "Results saved! We'll email you a copy shortly.") {
             navigator.sendBeacon(
