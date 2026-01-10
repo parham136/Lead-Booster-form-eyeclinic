@@ -35,24 +35,24 @@ export function ResultScreen({
         <button
           type="button"
           onClick={() => {
-            if (message !== "Results saved! We'll email you a copy shortly.") {
-              navigator.sendBeacon(
-                'https://orbilo.app.n8n.cloud/webhook-test/vision-quiz',
-                new Blob(
-                  [
-                    JSON.stringify({
-                      intent: 'abandon_nurture',
-                      email,
-                      firstName,
-                    }),
-                  ],
-                  { type: 'application/json' }
-                )
-              );
-            }
+          if (message !== "Results saved! We'll email you a copy shortly.") {
+            navigator.sendBeacon(
+              'https://orbilo.app.n8n.cloud/webhook-test/vision-quiz',
+              new Blob(
+                [JSON.stringify({
+                  intent: 'abandon_nurture',
+                  email,
+                  firstName,
+                })],
+                { type: 'application/json' }
+              )
+            );
+          }
+        
+          setIsAbandoning(true);   // 🔴 THIS WAS MISSING
+          onAbandon();             // closes the result screen
+        }}
 
-            onAbandon();
-          }}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors p-2 rounded-lg hover:bg-gray-100"
           aria-label="Close"
         >
