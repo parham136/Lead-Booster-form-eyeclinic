@@ -78,6 +78,7 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
 
         {!isAbandoning && (
         <button
+          type="button"
           onClick={(e) => {
             e.preventDefault();
             setIsAbandoning(true);
@@ -87,6 +88,7 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
         >
           Not now, just email me the results
         </button>
+
 
       )}
 
