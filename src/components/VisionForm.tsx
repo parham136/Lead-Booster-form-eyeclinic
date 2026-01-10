@@ -70,6 +70,8 @@ export function VisionForm() {
     firstName: string;
     lastName: string;
     email: string;
+    intent: 'initial_result'
+
   }) => {
     setLeadData(data);
     setIsLoading(true);
