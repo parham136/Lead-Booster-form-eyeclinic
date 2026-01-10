@@ -142,7 +142,7 @@ export function VisionForm() {
           intent: 'abandon_nurture',
           email: leadData?.email ?? '',
           firstName: leadData?.firstName ?? '',
-          status: 'result_abandoned',
+          intent: 'result_abandoned',
         };
     
         navigator.sendBeacon('https://orbilo.app.n8n.cloud/webhook-test/vision-quiz',
