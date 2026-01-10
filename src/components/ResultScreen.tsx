@@ -72,11 +72,12 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
       )}
 
 
-        {isAbandoning && (
-        <p className="w-full text-center text-gray-500 mt-4">
-          Saving your results…
-        </p>
-      )}
+        {isAbandoning && message !== "Results saved! We'll email you a copy shortly." && (
+          <p className="w-full text-center text-gray-500 mt-4">
+            Saving your results…
+          </p>
+        )}
+
 
       </div>
 
