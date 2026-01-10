@@ -37,7 +37,7 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
                 intent: 'abandon_nurture',
                 email,
                 firstName,
-                status: 'result_abandoned'
+                intent: 'result_abandoned'
               })],
               { type: 'application/json' }
             )
@@ -87,6 +87,7 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
         >
           Not now, just email me the results
         </button>
+
       )}
 
 
