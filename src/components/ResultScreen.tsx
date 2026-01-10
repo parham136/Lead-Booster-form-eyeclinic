@@ -46,25 +46,6 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
           <p className="text-gray-700 text-lg leading-relaxed whitespace-pre-line">
             {message}
           </p>
-          
-          {!isAbandoning && (
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                setIsAbandoning(true);
-                onAbandon();
-              }}
-              className="w-full text-center text-gray-600 hover:text-gray-800 transition-colors mt-4 underline"
-            >
-              Not now, just email me the results
-            </button>
-          )}
-          
-          {isAbandoning && message !== "Results saved! We'll email you a copy shortly." && (
-            <p className="w-full text-center text-gray-500 mt-4">
-              Saving your results…
-            </p>
-          )}
 
         </div>
 
