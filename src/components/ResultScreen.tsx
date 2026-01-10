@@ -31,19 +31,18 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
         onClick={() => {
           if (message !== "Results saved! We'll email you a copy shortly.") {
             navigator.sendBeacon(
-              'https://orbilo.app.n8n.cloud/webhook/vision-quiz',
-              new Blob(
-                [
-                  JSON.stringify({
-                    intent: 'abandon_nurture',
-                    email,
-                    firstName,
-                    status: 'result_abandoned',
-                  }),
-                ],
-                { type: 'application/json' }
-              )
-            );
+            'https://orbilo.app.n8n.cloud/webhook/vision-followup',
+            new Blob(
+              [JSON.stringify({
+                intent: 'abandon_nurture',
+                email,
+                firstName,
+                status: 'result_abandoned'
+              })],
+              { type: 'application/json' }
+            )
+          );
+
           }
       
           window.location.reload();
