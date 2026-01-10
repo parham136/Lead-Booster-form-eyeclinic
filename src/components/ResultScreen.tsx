@@ -4,8 +4,6 @@ import { CheckCircle, Calendar, X } from 'lucide-react';
 import { SmartBookingBridge } from './SmartBookingBridge'; // ADDED THIS
 import { bookingConfig } from '../config/bookingConfig'; // ADDED THIS
 
-const [isBookingOpen, setIsBookingOpen] = useState(false);
-const [isAbandoning, setIsAbandoning] = useState(false);
 
 
 interface ResultScreenProps {
@@ -19,6 +17,7 @@ interface ResultScreenProps {
 
 export function ResultScreen({ message, onBookConsultation, onAbandon, firstName, lastName, email }: ResultScreenProps) {
   const [isBookingOpen, setIsBookingOpen] = useState(false); // ADDED THIS
+  const [isAbandoning, setIsAbandoning] = useState(false);
 
   return (
     <motion.div
