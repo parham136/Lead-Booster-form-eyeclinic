@@ -56,13 +56,14 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
 
         <button
         onClick={(e) => {
-          e.preventDefault(); 
-          onAbandon();
+          e.preventDefault();
+          onAbandon(); // do NOT wait for it
         }}
         className="w-full text-center text-gray-600 hover:text-gray-800 transition-colors mt-4 underline"
       >
         Not now, just email me the results
       </button>
+
       </div>
 
       {/* THE OVERLAY MODULE */}
