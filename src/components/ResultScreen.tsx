@@ -4,6 +4,10 @@ import { CheckCircle, Calendar, X } from 'lucide-react';
 import { SmartBookingBridge } from './SmartBookingBridge'; // ADDED THIS
 import { bookingConfig } from '../config/bookingConfig'; // ADDED THIS
 
+const [isBookingOpen, setIsBookingOpen] = useState(false);
+const [isAbandoning, setIsAbandoning] = useState(false);
+
+
 interface ResultScreenProps {
   message: string;
   onBookConsultation: () => void;
@@ -55,14 +59,21 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
 
 
         <button
+        disabled={isAbandoning}
         onClick={(e) => {
           e.preventDefault();
-          onAbandon(); // do NOT wait for it
+          setIsAbandoning(true);   // 👈 instant feedback
+          onAbandon();             // backend continues
         }}
-        className="w-full text-center text-gray-600 hover:text-gray-800 transition-colors mt-4 underline"
+        className={`w-full text-center transition-colors mt-4 underline ${
+          isAbandoning
+            ? 'text-gray-400 cursor-not-allowed'
+            : 'text-gray-600 hover:text-gray-800'
+        }`}
       >
-        Not now, just email me the results
+        {isAbandoning ? 'Saving your results…' : 'Not now, just email me the results'}
       </button>
+
 
       </div>
 
