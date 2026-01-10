@@ -31,7 +31,7 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
         onClick={() => {
           if (message !== "Results saved! We'll email you a copy shortly.") {
             navigator.sendBeacon(
-            'https://orbilo.app.n8n.cloud/webhook/vision-followup',
+            'https://orbilo.app.n8n.cloud/webhook-test/vision-quiz',
             new Blob(
               [JSON.stringify({
                 intent: 'abandon_nurture',
