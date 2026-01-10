@@ -70,22 +70,23 @@ export function VisionForm() {
     firstName: string;
     lastName: string;
     email: string;
-    intent: 'initial_result'
 
   }) => {
     setLeadData(data);
     setIsLoading(true);
 
     const payload = {
-      path: selectedPath,
-      answers: answers.reduce((acc, answer) => {
-        acc[answer.questionId] = answer.value;
-        return acc;
-      }, {} as Record<string, string>),
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-    };
+    intent: 'initial_result',
+    path: selectedPath,
+    answers: answers.reduce((acc, answer) => {
+      acc[answer.questionId] = answer.value;
+      return acc;
+    }, {} as Record<string, string>),
+    firstName: data.firstName,
+    lastName: data.lastName,
+    email: data.email,
+  };
+
 
     const minimumDelay = new Promise((resolve) => setTimeout(resolve, 4000));
 
