@@ -49,9 +49,10 @@ export function ResultScreen({
             );
           }
         
-          setIsAbandoning(true);   // 🔴 THIS WAS MISSING
-          onAbandon();             // closes the result screen
+          // HARD EXIT — REQUIRED FOR MOBILE
+          window.location.href = window.location.pathname;
         }}
+
 
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors p-2 rounded-lg hover:bg-gray-100"
           aria-label="Close"
