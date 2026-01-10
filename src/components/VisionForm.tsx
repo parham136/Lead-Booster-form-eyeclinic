@@ -133,24 +133,22 @@ export function VisionForm() {
     window.location.href = 'https://orbilo.app.n8n.cloud/webhook/vision-quiz';
   };
 
-        const handleAbandon = async () => {
-        try {
-          fetch('https://orbilo.app.n8n.cloud/webhook/vision-followup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              email: leadData?.email,
-              firstName: leadData?.firstName,
-              state: 'ABANDONED'
-            })
-          });
-        } catch (e) {
-          console.error(e);
-        }
-      
-        setResultMessage("We'll email you shortly.");
-      };
-
+      const handleAbandon = async () => {
+      try {
+        fetch('https://orbilo.app.n8n.cloud/webhook/vision-followup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: leadData?.email,
+            firstName: leadData?.firstName,
+            state: 'ABANDONED'
+          })
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    
+      setResultMessage("We'll email you shortly.");
 
       setTimeout(() => {
         setStage('qualifier');
