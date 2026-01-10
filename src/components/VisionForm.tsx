@@ -143,7 +143,7 @@ export function VisionForm() {
         };
     
         navigator.sendBeacon(
-          'https://orbilo.app.n8n.cloud/webhook/vision-followup',
+          'https://orbilo.app.n8n.cloud/webhook-test/vision-followup',
           new Blob([JSON.stringify(payload)], { type: 'application/json' })
         );
     
