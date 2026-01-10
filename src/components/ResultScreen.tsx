@@ -67,6 +67,7 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
         </div>
 
         <button
+          type="button"
           onClick={() => setIsBookingOpen(true)} // UPDATED THIS
           className="w-full bg-teal-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-teal-700 transition-all flex items-center justify-center gap-3 group"
         >
