@@ -36,8 +36,7 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
               [JSON.stringify({
                 intent: 'abandon_nurture',
                 email,
-                firstName,
-                intent: 'result_abandoned'
+                firstName
               })],
               { type: 'application/json' }
             )
