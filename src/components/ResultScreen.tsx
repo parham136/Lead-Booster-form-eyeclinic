@@ -40,7 +40,6 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
           <X size={24} />
         </button>
 
-
         <div className="flex items-center gap-3 mb-6">
           <CheckCircle className="text-teal-500" size={48} />
           <h2 className="text-3xl font-semibold text-gray-900">
