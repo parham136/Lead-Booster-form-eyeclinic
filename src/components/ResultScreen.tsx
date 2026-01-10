@@ -57,21 +57,19 @@ export function ResultScreen({ message, onBookConsultation, onAbandon, firstName
         </button>
 
 
+        {!isAbandoning && (
         <button
-        disabled={isAbandoning}
-        onClick={(e) => {
-          e.preventDefault();
-          setIsAbandoning(true);   // 👈 instant feedback
-          onAbandon();             // backend continues
-        }}
-        className={`w-full text-center transition-colors mt-4 underline ${
-          isAbandoning
-            ? 'text-gray-400 cursor-not-allowed'
-            : 'text-gray-600 hover:text-gray-800'
-        }`}
-      >
-        {isAbandoning ? 'Saving your results…' : 'Not now, just email me the results'}
-      </button>
+          onClick={(e) => {
+            e.preventDefault();
+            setIsAbandoning(true);
+            onAbandon();
+          }}
+          className="w-full text-center text-gray-600 hover:text-gray-800 transition-colors mt-4 underline"
+        >
+          Not now, just email me the results
+        </button>
+      )}
+
 
 
       </div>
