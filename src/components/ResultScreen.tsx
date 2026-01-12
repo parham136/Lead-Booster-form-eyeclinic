@@ -37,7 +37,7 @@ export function ResultScreen({
           onClick={() => {
           if (message !== "Results saved! We'll email you a copy shortly.") {
             navigator.sendBeacon(
-              'https://orbilo.app.n8n.cloud/webhook-test/vision-quiz',
+              'https://orbilo.app.n8n.cloud/webhook-test/8cdb0abe-4768-47b4-956e-aa6c98c1300f/vision-quiz',
               new Blob(
                 [JSON.stringify({
                   intent: 'abandon_nurture',
