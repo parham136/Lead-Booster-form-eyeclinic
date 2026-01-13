@@ -90,7 +90,7 @@ export function VisionForm() {
 
     const minimumDelay = new Promise((resolve) => setTimeout(resolve, 4000));
 
-    const webhookPromise = fetch('https://orbilo.app.n8n.cloud/webhook-test/8cdb0abe-4768-47b4-956e-aa6c98c1300f/vision-quiz', {
+    const webhookPromise = fetch('https://orbilo.app.n8n.cloud/webhook/vision-quiz', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ export function VisionForm() {
 
   const handleBookConsultation = async () => {
     try {
-      await fetch('https://orbilo.app.n8n.cloud/webhook-test/8cdb0abe-4768-47b4-956e-aa6c98c1300f/vision-quiz', {
+      await fetch('https://orbilo.app.n8n.cloud/webhook/vision-quiz', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -133,7 +133,7 @@ export function VisionForm() {
       console.error('Error sending booking intent:', error);
     }
 
-    window.location.href = 'https://orbilo.app.n8n.cloud/webhook-test/8cdb0abe-4768-47b4-956e-aa6c98c1300f/vision-quiz';
+    window.location.href = 'https://orbilo.app.n8n.cloud/webhook/vision-quiz';
   };
 
       const handleAbandon = () => {
@@ -145,7 +145,7 @@ export function VisionForm() {
           intent: 'result_abandoned',
         };
     
-        navigator.sendBeacon('https://orbilo.app.n8n.cloud/webhook-test/8cdb0abe-4768-47b4-956e-aa6c98c1300f/vision-quiz',
+        navigator.sendBeacon('https://orbilo.app.n8n.cloud/webhook/vision-quiz',
           new Blob([JSON.stringify(payload)], { type: 'application/json' })
         );
     
