@@ -161,6 +161,7 @@ export function VisionForm() {
         console.error('Error sending abandonment data:', error);
       }
     };
+  
   const getCurrentQuestion = (): Question | null => {
     if (stage === 'qualifier') {
       return qualifierQuestion;
