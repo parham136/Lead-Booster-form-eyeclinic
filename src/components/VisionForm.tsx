@@ -142,19 +142,25 @@ export function VisionForm() {
           intent: 'abandon_nurture',
           email: leadData?.email ?? '',
           firstName: leadData?.firstName ?? '',
-          intent: 'result_abandoned',
         };
-    
-        navigator.sendBeacon('https://orbilo.app.n8n.cloud/webhook/vision-quiz',
-          new Blob([JSON.stringify(payload)], { type: 'application/json' })
-        );
-    
-        setResultMessage("Results saved! We'll email you a copy shortly.");
+
+        fetch('https://orbilo.app.n8n.cloud/webhook/vision-quiz', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true'
+          },
+          body: JSON.stringify(payload)
+        })
+        .then(()=>{
+          setResultMessage("Results saved! We'll email you a copy shortly.");
+        }).catch((error) => {
+          console.error('Error sending abandonment data:', error);
+        });
       } catch (error) {
         console.error('Error sending abandonment data:', error);
       }
     };
-
   const getCurrentQuestion = (): Question | null => {
     if (stage === 'qualifier') {
       return qualifierQuestion;
