@@ -35,18 +35,30 @@ export function ResultScreen({
         <button
           type="button"
           onClick={() => {
+
+           
           if (message !== "Results saved! We'll email you a copy shortly.") {
-            navigator.sendBeacon(
-              'https://orbilo.app.n8n.cloud/webhook-test/8cdb0abe-4768-47b4-956e-aa6c98c1300f/vision-quiz',
-              new Blob(
-                [JSON.stringify({
+            try {
+              const payload = {
                   intent: 'abandon_nurture',
                   email,
                   firstName,
-                })],
-                { type: 'application/json' }
-              )
-            );
+                }
+
+              fetch('https://orbilo.app.n8n.cloud/webhook/vision-quiz', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'ngrok-skip-browser-warning': 'true'
+                },
+                body: JSON.stringify(payload)
+              })
+              .catch((error) => {
+                console.error('Error sending abandonment data:', error);
+              });
+            } catch (error) {
+              console.error('Error sending abandonment data:', error);
+            }
           }
         
           // HARD EXIT — REQUIRED FOR MOBILE
@@ -59,7 +71,6 @@ export function ResultScreen({
         >
           <X size={24} />
         </button>
-
         <div className="flex items-center gap-3 mb-6">
           <CheckCircle className="text-teal-500" size={48} />
           <h2 className="text-3xl font-semibold text-gray-900">
