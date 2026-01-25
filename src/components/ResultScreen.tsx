@@ -45,7 +45,7 @@ export function ResultScreen({
                   firstName,
                 }
 
-              fetch('https://orbilo.app.n8n.cloud/webhook/vision-quiz', {
+              fetch('https://orbilo136.app.n8n.cloud/webhook/vision-quiz', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
